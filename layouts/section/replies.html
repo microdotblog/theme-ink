@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+{{ partial "header.html" . }}
+
+<body>
+	<div class="container wrapper list">
+		{{ partial "head.html" . }}
+
+		{{ if isset .Data "Term" }}
+			<h2>{{ .Data.Term }}</h2>
+		{{ else }}
+		<h2 class="page-title">{{ .Name }}</h2>
+		{{ end }}
+
+		{{ .Content }}
+
+		<ul class="posts flat">
+    	{{ if .Site.Params.paginate_replies }}
+				{{ $paginator := .Paginate (where .Pages.ByDate.Reverse "Type" "reply") }}
+				{{ $list := $paginator.Pages }}
+				{{ range $list  }}
+					<li class="post">
+						{{ partial "post-preview.html" . }}
+					</li>
+				{{ end }}
+			{{ else }}
+				{{ $list := where .Pages.ByDate.Reverse "Type" "reply" }}
+				{{ range $list  }}
+					<li class="post">
+						{{ partial "post-preview.html" . }}
+					</li>
+				{{ end }}
+			{{ end }}
+		</ul>
+	</div>
+
+	{{ partial "footer.html" . }}
+</body>
+
+</html>
